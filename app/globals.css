@@ -1,0 +1,191 @@
+@import "tailwindcss";
+
+/*
+  HireTrack's look: a job hunt kept in a good notebook.
+  Warm paper, dark ink, and a deep "go" green for buttons and offers. Each stage of an
+  application has its own colour (Saved slate, Applied blue, Interview violet, Offer green,
+  Closed grey), coral marks follow-ups that are due, and red is for deleting.
+  Dark mode is the same notebook at night. Text colours pass WCAG AA in both themes.
+*/
+
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+@theme {
+  --color-page: #f6f4ef; /* the paper */
+  --color-card: #ffffff; /* cards, panels and forms */
+  --color-ink: #1c1f2b; /* text */
+  --color-ink-soft: #545968; /* quieter text (passes AA on page and card) */
+  --color-line: #e2ddd2;
+  --color-brand: #1b6b4f; /* buttons, links, offers */
+  --color-on-brand: #ffffff;
+  --color-brand-soft: #e0efe7;
+  --color-glow: #8fe3bd; /* the tick on a message, on the dark message bar */
+  --color-coral: #a8401c; /* follow-ups that are due */
+  --color-coral-soft: #fbe6dc;
+  --color-alert: #b42318; /* delete */
+  --color-alert-soft: #fde8e6;
+
+  /* The five stages */
+  --color-saved: #576074;
+  --color-saved-soft: #eceef2;
+  --color-applied: #2a59b0;
+  --color-applied-soft: #e3ebfa;
+  --color-interview: #6a3db5;
+  --color-interview-soft: #efe7fb;
+  --color-offer: #1b7349;
+  --color-offer-soft: #dff2e7;
+  --color-closed: #676c78;
+  --color-closed-soft: #ecebe8;
+
+  --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+}
+
+:root[data-theme="dark"] {
+  --color-page: #12141a;
+  --color-card: #1b1e27;
+  --color-ink: #eceef3;
+  --color-ink-soft: #a9aebb;
+  --color-line: #2c303c;
+  --color-brand: #74d3a8;
+  --color-on-brand: #0d1a14;
+  --color-brand-soft: #18322a;
+  --color-glow: #1b6b4f;
+  --color-coral: #ffa283;
+  --color-coral-soft: #3b2219;
+  --color-alert: #ff9b8f;
+  --color-alert-soft: #3d1c1c;
+
+  --color-saved: #b3bacb;
+  --color-saved-soft: #262a35;
+  --color-applied: #93b4f4;
+  --color-applied-soft: #1d2945;
+  --color-interview: #c4a6f5;
+  --color-interview-soft: #2c2142;
+  --color-offer: #7fd9a8;
+  --color-offer-soft: #173225;
+  --color-closed: #a3a7b1;
+  --color-closed-soft: #25272d;
+  color-scheme: dark;
+}
+
+html {
+  color-scheme: light;
+}
+
+body {
+  background: var(--color-page);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-tap-highlight-color: transparent;
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-brand);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+@layer components {
+  /* Round icon buttons */
+  .tool {
+    display: inline-flex;
+    height: 2.5rem;
+    min-width: 2.5rem;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9999px;
+    color: var(--color-ink-soft);
+  }
+  .tool:hover {
+    background: var(--color-brand-soft);
+    color: var(--color-brand);
+  }
+  /* Text boxes */
+  .field {
+    width: 100%;
+    border-radius: 0.75rem;
+    border: 1px solid var(--color-line);
+    background: var(--color-card);
+    color: var(--color-ink);
+    padding: 0.7rem 0.9rem;
+    font-size: 16px; /* 16px stops phones zooming in when you tap a box */
+  }
+  .field::placeholder {
+    color: var(--color-ink-soft);
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: 0.75rem;
+    padding: 0.7rem 1.1rem;
+    font-weight: 700;
+    background: var(--color-brand);
+    color: var(--color-on-brand);
+  }
+  .btn:hover {
+    filter: brightness(1.08);
+  }
+  .btn:disabled {
+    opacity: 0.6;
+  }
+  .btn-quiet {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: 0.75rem;
+    padding: 0.6rem 1rem;
+    font-weight: 600;
+    border: 1px solid var(--color-line);
+    background: var(--color-card);
+    color: var(--color-ink);
+  }
+  .btn-quiet:hover {
+    border-color: var(--color-brand);
+    color: var(--color-brand);
+  }
+  /* A section of a page: a white panel with a soft edge */
+  .panel {
+    border-radius: 1rem;
+    border: 1px solid var(--color-line);
+    background: var(--color-card);
+    padding: 1.25rem;
+  }
+}
+
+/* New messages slide up */
+@keyframes rise {
+  from {
+    transform: translateY(12px);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+.rise {
+  animation: rise 220ms ease-out both;
+}
+
+/* The column a card is being dragged over */
+.drop-target {
+  outline: 2px dashed var(--color-brand);
+  outline-offset: -2px;
+  background: var(--color-brand-soft);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rise {
+    animation: none;
+  }
+}
+
+/* Before Firebase has checked who's signed in, the page has both the loading screen and the
+   sign-in screen; the hint from app/layout.tsx picks which one shows (see lib/auth.ts). */
+html[data-signed-in] .gate-login,
+html:not([data-signed-in]) .gate-splash {
+  display: none;
+}
