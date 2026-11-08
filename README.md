@@ -3,7 +3,7 @@
 **Your job hunt on one board.** Track every job from Saved to Offer, get reminded to follow up, walk into
 interviews prepared, note which CV you sent, and see how your job hunt is going.
 
-**Live site:** (add the Vercel address here once it's deployed)
+**Live site:** https://hiretrack-five-phi.vercel.app/
 
 Built by Ammara Badat as part of my portfolio. It uses Firebase, like PaperTrail, TickList, Rememba and ShiftBoard,
 so it syncs between your phone and laptop and keeps working with no signal. I'm building it for my own job hunt first.
