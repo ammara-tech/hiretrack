@@ -88,6 +88,25 @@ export function addExamples() {
   quietly(batch.commit());
 }
 
+/** For a new demo: example jobs, two CVs and a cover letter (linked to some of the jobs), and a weekly goal */
+export function seedDemo() {
+  const uid = me();
+  const batch = writeBatch(db());
+  const now = Date.now();
+  const cv = doc(collection(db(), "users", uid, "docs"));
+  const cv2 = doc(collection(db(), "users", uid, "docs"));
+  const letter = doc(collection(db(), "users", uid, "docs"));
+  batch.set(cv, { kind: "cv", name: "CV: web developer", link: "", notes: "Projects first, then skills", createdAt: now });
+  batch.set(cv2, { kind: "cv", name: "CV: IT support", link: "", notes: "", createdAt: now - 1 });
+  batch.set(letter, { kind: "cover", name: "Cover letter: graduate roles", link: "", notes: "", createdAt: now - 2 });
+  exampleJobs(todayIso(), now).forEach((job, i) => {
+    const sentWith = job.appliedOn ? { cvId: i % 3 === 2 ? cv2.id : cv.id, coverId: i % 2 ? letter.id : "" } : {};
+    batch.set(doc(collection(db(), "users", uid, "jobs")), { ...job, ...sentWith });
+  });
+  batch.set(doc(db(), "users", uid), { name: "Guest", weeklyGoal: 5 }, { merge: true });
+  quietly(batch.commit());
+}
+
 export function removeExamples() {
   const examples = getApp().jobs.filter((j) => j.example);
   const batch = writeBatch(db());

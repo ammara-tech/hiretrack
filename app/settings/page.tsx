@@ -4,6 +4,8 @@ import { useState, type FormEvent } from "react";
 import Icon from "@/components/Icon";
 import { addExamples, deleteEverything, removeExamples, saveProfile } from "@/lib/actions";
 import { signOutUser } from "@/lib/auth";
+import { endDemo } from "@/lib/demo";
+import { firebase } from "@/lib/firebase";
 import { jobsCsv } from "@/lib/csv";
 import { todayIso } from "@/lib/dates";
 import { MAX_GOAL } from "@/lib/read";
@@ -43,8 +45,11 @@ export default function SettingsPage() {
     setDeleting(true);
     setError("");
     try {
-      await deleteEverything();
-      await signOutUser();
+      if (firebase().auth.currentUser?.isAnonymous) await endDemo(); // a guest: delete the guest account too
+      else {
+        await deleteEverything();
+        await signOutUser();
+      }
     } catch {
       setError("Couldn't delete everything. Check your connection and try again.");
       setDeleting(false);
@@ -101,7 +106,7 @@ export default function SettingsPage() {
             <Icon name="download" className="h-4 w-4" />
             Download my jobs
           </button>
-          <button type="button" onClick={() => signOutUser()} className="btn-quiet">
+          <button type="button" onClick={() => (firebase().auth.currentUser?.isAnonymous ? endDemo() : signOutUser())} className="btn-quiet">
             <Icon name="logout" className="h-4 w-4" />
             Sign out
           </button>
