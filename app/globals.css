@@ -1,27 +1,28 @@
 @import "tailwindcss";
 
 /*
-  HireTrack's look: a job hunt kept in a good notebook.
-  Warm paper, dark ink, and a deep "go" green for buttons and offers. Each stage of an
-  application has its own colour (Saved slate, Applied blue, Interview violet, Offer green,
-  Closed grey), coral marks follow-ups that are due, and red is for deleting.
-  Dark mode is the same notebook at night. Text colours pass WCAG AA in both themes.
+  HireTrack's look: a career studio.
+  A cool, light workspace with a charcoal sidebar (it stays dark in both themes), violet for
+  buttons and links, and coral for what needs you: follow-ups that are due and the page you're on.
+  Sora, a geometric typeface, for everything. Each stage of an application keeps its own colour
+  (Saved slate, Applied blue, Interview violet, Offer green, Closed grey), and red is for deleting.
+  Dark mode is the studio after hours. Text colours pass WCAG AA in both themes.
 */
 
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
 @theme {
-  --color-page: #f6f4ef; /* the paper */
+  --color-page: #f2f1f6; /* the studio wall */
   --color-card: #ffffff; /* cards, panels and forms */
-  --color-ink: #1c1f2b; /* text */
-  --color-ink-soft: #545968; /* quieter text (passes AA on page and card) */
-  --color-line: #e2ddd2;
-  --color-brand: #1b6b4f; /* buttons, links, offers */
+  --color-ink: #18171f; /* text */
+  --color-ink-soft: #56546a; /* quieter text (passes AA on page and card) */
+  --color-line: #e2e0ea;
+  --color-brand: #5a3dd4; /* violet: buttons and links */
   --color-on-brand: #ffffff;
-  --color-brand-soft: #e0efe7;
-  --color-glow: #8fe3bd; /* the tick on a message, on the dark message bar */
-  --color-coral: #a8401c; /* follow-ups that are due */
-  --color-coral-soft: #fbe6dc;
+  --color-brand-soft: #ebe7fc;
+  --color-glow: #c9bdff; /* the tick on a message, on the dark message bar */
+  --color-coral: #b4391b; /* follow-ups that are due */
+  --color-coral-soft: #fde5dd;
   --color-alert: #b42318; /* delete */
   --color-alert-soft: #fde8e6;
 
@@ -37,21 +38,30 @@
   --color-closed: #676c78;
   --color-closed-soft: #ecebe8;
 
-  --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-sora, ui-sans-serif), ui-sans-serif, system-ui, sans-serif;
+
+  /* The sidebar on laptops: charcoal in both themes, with its own text colours */
+  --color-rail: #16151c;
+  --color-rail-ink: #f2f1f6;
+  --color-rail-soft: #a9a7ba;
+  --color-rail-line: #2a2833;
+  --color-rail-coral: #ff8f73;
 }
 
 :root[data-theme="dark"] {
-  --color-page: #12141a;
-  --color-card: #1b1e27;
-  --color-ink: #eceef3;
-  --color-ink-soft: #a9aebb;
-  --color-line: #2c303c;
-  --color-brand: #74d3a8;
-  --color-on-brand: #0d1a14;
-  --color-brand-soft: #18322a;
-  --color-glow: #1b6b4f;
-  --color-coral: #ffa283;
+  --color-page: #121117;
+  --color-card: #1c1a24;
+  --color-ink: #efeef5;
+  --color-ink-soft: #aba8bd;
+  --color-line: #2f2c3b;
+  --color-brand: #b8a7ff;
+  --color-on-brand: #16112e;
+  --color-brand-soft: #282245;
+  --color-glow: #4a2fc0;
+  --color-coral: #ff9b80;
   --color-coral-soft: #3b2219;
+  --color-rail: #0d0c12;
+  --color-rail-line: #24222d;
   --color-alert: #ff9b8f;
   --color-alert-soft: #3d1c1c;
 
@@ -188,4 +198,28 @@ body {
 html[data-signed-in] .gate-login,
 html:not([data-signed-in]) .gate-splash {
   display: none;
+}
+
+/* The coloured squares behind the sign-in card: a job board drifting slowly upwards */
+@keyframes drift {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-50%);
+  }
+}
+.drift {
+  animation: drift 60s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .drift {
+    animation: none;
+  }
+}
+
+/* Headings are a little tighter in Sora */
+h1,
+h2 {
+  letter-spacing: -0.02em;
 }

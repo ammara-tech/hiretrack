@@ -65,9 +65,17 @@ follow up, or walk into an interview without having looked the company up.
 - **Installable** ("Add to Home screen"), light and dark mode, and works on a phone and a laptop.
 
 ## Design
-A job hunt kept in a good notebook: warm paper, dark ink and a deep "go" green for buttons and offers. Each stage
-has its own colour (Saved slate, Applied blue, Interview violet, Offer green, Closed grey) on the edge of its cards,
-coral marks follow-ups that are due, and red is for deleting. Text colours pass WCAG AA contrast in both themes.
+A career studio: a cool, light workspace, violet for buttons and links, coral for what needs you (follow-ups that
+are due, and the page you're on), and Sora, a geometric typeface. Each of my apps has its own look; this is HireTrack's.
+
+- **Signing in:** one card in the middle of a charcoal page, with a made-up job board drifting slowly behind it, so
+  you see what HireTrack is for before you sign up. The board stands still if your device asks for less motion.
+- **Inside, on a laptop:** a charcoal sidebar (dark in both themes) with the four pages and **Your pipeline**: how
+  many jobs are in each stage, with a bar for each, so your whole job hunt is visible from every page.
+- **Inside, on a phone:** a bar at the top and the pages as a row of tabs.
+
+Each stage has its own colour (Saved slate, Applied blue, Interview violet, Offer green, Closed grey) on the edge of
+its cards and in the sidebar, and red is for deleting. Text colours pass WCAG AA contrast in both themes.
 
 ## Tech stack
 Next.js 16 (App Router), React 19, TypeScript, Tailwind CSS 4, Firebase Authentication and Cloud Firestore,
@@ -77,7 +85,7 @@ Vitest, GitHub Actions, Vercel.
 ```
 app/              Pages: the board (/), a job (/job?id=…), Today (/today), CVs (/documents), Stats (/stats),
                   Settings (/settings), the app manifest, icons and the light/dark script
-components/       The sign-in screen, the header, the board and its cards, Add a job, the job page with its
+components/       The sign-in screen, the sidebar and header, the board and its cards, Add a job, the job page with its
                   interviews and prep, toasts, icons and the logo
 lib/              The board's rules (jobs.ts), dates (dates.ts), reminders, follow-up emails and calendar files
                   (reminders.ts), interview prep (prep.ts), CVs and cover letters (documents.ts), stats (stats.ts),

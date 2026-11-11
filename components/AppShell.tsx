@@ -57,9 +57,11 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
       <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded focus:bg-card focus:px-4 focus:py-2">
         Skip to the main content
       </a>
-      {demo && <DemoBanner />}
       <Header />
-      <main id="main" className="mx-auto max-w-6xl px-4 pb-28 pt-6">
+      {/* On laptops everything sits to the right of the sidebar */}
+      <div className="lg:pl-64">
+      {demo && <DemoBanner />}
+      <main id="main" className="mx-auto max-w-6xl px-4 pb-28 pt-6 lg:px-8 lg:pt-8">
         {!app.online && (
           <p className="mb-4 flex items-start gap-2 rounded-xl border border-line bg-card px-4 py-3 text-sm">
             <Icon name="cloudOff" className="mt-0.5 h-4 w-4 shrink-0 text-alert" />
@@ -78,6 +80,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
         )}
         {children}
       </main>
+      </div>
       <Toasts />
     </>
   );

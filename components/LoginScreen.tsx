@@ -7,8 +7,8 @@ import ThemeToggle from "@/components/ThemeToggle";
 import { authErrorMessage, errorCode, finishRedirectSignIn, resetPassword, signInDemo, signInEmail, signInGoogle, signUpEmail } from "@/lib/auth";
 
 /*
-  The sign-in screen. On a laptop the green side shows three small example cards (the board,
-  a reminder and the stats), so people see what HireTrack does before they sign up.
+  The sign-in screen: one card in the middle of a dark page, with a made-up job board drifting
+  slowly behind it, so people see what HireTrack is for before they sign up.
 */
 export default function LoginScreen() {
   const [mode, setMode] = useState<"signIn" | "create">("signIn");
@@ -25,15 +25,18 @@ export default function LoginScreen() {
   }, []);
 
   const demoBox = (
-    <div className="rounded-xl border border-dashed border-brand/50 bg-brand-soft/40 p-4">
-      <p className="font-bold">Just looking?</p>
-      <p className="mt-1 text-sm text-ink-soft">Try HireTrack with example jobs. No account needed, and everything is deleted when you end the demo.</p>
-      <button type="button" disabled={busy} onClick={() => run(signInDemo)} className="btn mt-3 w-full py-2.5">
+    <div className="rounded-2xl bg-coral-soft p-4">
+      <p className="flex items-center gap-2 font-bold">
+        <Icon name="sparkle" className="h-4 w-4 text-coral" />
+        Just looking?
+      </p>
+      <p className="mt-1 text-sm">Try HireTrack with example jobs. No account needed, and everything is deleted when you end the demo.</p>
+      <button type="button" disabled={busy} onClick={() => run(signInDemo)} className="btn mt-3 w-full !bg-rail py-2.5 !text-rail-ink dark:!bg-rail-ink dark:!text-rail">
         Try the demo
       </button>
     </div>
   );
-  
+
   // If Google sign-in went the full-page way and failed, say why when the page comes back.
   useEffect(() => {
     finishRedirectSignIn().catch((e) => {
@@ -73,35 +76,25 @@ export default function LoginScreen() {
   }
 
   return (
-    <div className="grid min-h-screen lg:grid-cols-2">
-      <aside className="relative hidden overflow-hidden bg-[#123528] p-12 text-white lg:flex lg:flex-col">
-        <p className="flex items-center gap-2 text-2xl font-extrabold">
+    <div className="relative min-h-screen overflow-hidden bg-rail text-rail-ink">
+      <BoardBackdrop />
+
+      <main className="relative mx-auto flex min-h-screen max-w-md flex-col justify-center px-4 py-6 sm:py-10">
+        <p className="flex items-center justify-center gap-2.5 text-xl font-bold">
           <Logo className="h-9 w-9" />
           HireTrack
         </p>
-        <DemoBoard />
-        {/* A big line of text, not the page's heading: on phones this side is hidden, so "Welcome back" is the h1 */}
-        <p className="relative mt-auto max-w-md text-5xl font-extrabold leading-[1.05] tracking-tight">Every application, one board.</p>
-        <p className="relative mt-5 max-w-md text-lg text-white/85">
-          Know where every job stands, follow up on time, walk into interviews prepared, and see which CV gets you called back.
-        </p>
-      </aside>
+        <p className="mt-3 text-center text-rail-soft">Every application, one board.</p>
 
-      <main className="flex flex-col px-5 py-6 sm:px-10">
-        <div className="flex items-center justify-between">
-          <p className="flex items-center gap-2 text-xl font-extrabold lg:invisible">
-            <Logo />
-            HireTrack
-          </p>
-          <ThemeToggle />
-        </div>
-
-        <div className="m-auto w-full max-w-sm py-10">
-          {fromDemoLink && <div className="mb-8">{demoBox}</div>}
-          <h1 className="text-3xl font-extrabold tracking-tight">{mode === "signIn" ? "Welcome back" : "Create your account"}</h1>
+        <div className="mt-6 rounded-3xl bg-card p-6 text-ink shadow-[0_40px_80px_-30px_rgba(0,0,0,0.8)] ring-1 ring-white/10 sm:p-8">
+          <div className="-mr-2 -mt-2 flex justify-end">
+            <ThemeToggle />
+          </div>
+          {fromDemoLink && <div className="mb-6">{demoBox}</div>}
+          <h1 className="text-3xl font-bold">{mode === "signIn" ? "Welcome back" : "Create your account"}</h1>
           <p className="mt-2 text-ink-soft">{mode === "signIn" ? "Sign in to see your board." : "It's free, and takes a minute."}</p>
 
-          <button type="button" disabled={busy} onClick={() => run(signInGoogle)} className="btn-quiet mt-8 w-full py-3">
+          <button type="button" disabled={busy} onClick={() => run(signInGoogle)} className="btn-quiet mt-6 w-full py-3">
             <Icon name="google" />
             Continue with Google
           </button>
@@ -160,7 +153,7 @@ export default function LoginScreen() {
             </button>
           )}
 
-          <p className="mt-8 text-ink-soft">
+          <p className="mt-6 text-ink-soft">
             {mode === "signIn" ? "New to HireTrack? " : "Already have an account? "}
             <button
               type="button"
@@ -175,91 +168,58 @@ export default function LoginScreen() {
             </button>
           </p>
           {!fromDemoLink && <div className="mt-6">{demoBox}</div>}
-          <p className="mt-6 text-sm text-ink-soft">Your jobs are private: only you can see them. They&apos;re stored in Google&apos;s Firebase database, and you can delete everything in Settings.</p>
+          <p className="mt-6 text-xs text-ink-soft">Your jobs are private: only you can see them. They&apos;re stored in Google&apos;s Firebase database, and you can delete everything in Settings.</p>
         </div>
+        <p className="mt-6 text-center text-sm text-rail-soft">Follow up on time, walk into interviews prepared, and see which CV gets you called back.</p>
       </main>
     </div>
   );
 }
 
 /*
-  Three made-up cards, as a preview on the sign-in screen. They sit in a grid, so none hides
-  another (on narrower laptops the reminder card is left out). Each shows something HireTrack does:
-    the board, with jobs in Applied, Interview and Offer
-    a follow-up reminder with a ready-written email
-    the stats
-  Decorative only: screen readers skip it.
+  Behind the sign-in card: a made-up job board, five columns (one per stage) of small job cards
+  drifting slowly upwards. Each column's list is drawn twice, so moving it up by half loops
+  without a jump. It's faded towards the middle so the card stays easy to read. Decorative only:
+  screen readers skip it, and it stands still if you've asked your device for less motion.
 */
-const card = "rounded-2xl bg-white p-4 text-[#1c1f2b] shadow-[0_24px_50px_-18px_rgba(0,0,0,0.55)]";
+const BOARD: [string, string, [string, string][]][] = [
+  ["Saved", "#b3bacb", [["Bluegum Labs", "Junior dev"], ["Sable Tech", "QA tester"], ["Kloof Media", "Web designer"], ["Nandi Bank", "IT grad"]]],
+  ["Applied", "#93b4f4", [["Fynbos Digital", "Graduate dev"], ["Karoo Data", "IT intern"], ["Protea Cloud", "Support"], ["Ubuntu Pay", "Frontend"]]],
+  ["Interview", "#c4a6f5", [["Umoya Health", "Thu 14:00"], ["Marula Games", "Mon 10:30"], ["Baobab IT", "Video call"]]],
+  ["Offer", "#7fd9a8", [["Sunbird Studio", "R28 000"], ["Aloe Systems", "R24 500"]]],
+  ["Closed", "#a3a7b1", [["Cape Logic", "Not this time"], ["Kestrel AI", "Withdrew"], ["Impala Soft", "Not this time"]]],
+];
 
-function DemoBoard() {
-  const cols: [string, string, string, [string, string][]][] = [
-    ["Applied", "#2a59b0", "#e3ebfa", [["Fynbos Digital", "Graduate dev"], ["Karoo Data", "IT intern"]]],
-    ["Interview", "#6a3db5", "#efe7fb", [["Umoya Health", "Thu 14:00"]]],
-    ["Offer", "#1b7349", "#dff2e7", [["Sunbird Studio", "R28 000"]]],
-  ];
+function BoardBackdrop() {
   return (
-    <div aria-hidden="true" className="relative mx-auto mb-10 mt-8 grid w-full max-w-[540px] select-none gap-5 xl:grid-cols-2">
-      {/* The board */}
-      <div className={`${card} w-full max-w-[330px] rotate-[-2.5deg] justify-self-center xl:col-span-2 xl:justify-self-start`}>
-        <p className="flex items-center justify-between text-sm font-bold">
-          <span className="flex items-center gap-1.5">
-            <Icon name="board" className="h-4 w-4 text-[#1b6b4f]" />
-            My job hunt
-          </span>
-          <span className="text-[11px] font-semibold text-[#545968]">6 jobs</span>
-        </p>
-        <div className="mt-3 grid gap-2" style={{ gridTemplateColumns: "repeat(3, minmax(0, 1fr))" }}>
-          {cols.map(([name, colour, soft, jobs]) => (
-            <div key={name} className="rounded-lg p-1.5" style={{ background: soft }}>
-              <p className="mb-1.5 text-[10px] font-bold uppercase tracking-wider" style={{ color: colour }}>
-                {name}
-              </p>
-              {jobs.map(([company, line]) => (
-                <div key={company} className="mb-1.5 rounded-md border-l-[3px] bg-white px-1.5 py-1 text-[10px] leading-tight shadow-sm" style={{ borderColor: colour }}>
-                  <p className="font-bold">{company}</p>
-                  <p className="text-[#545968]">{line}</p>
+    <div aria-hidden="true" className="pointer-events-none absolute inset-0 select-none">
+      <div className="absolute inset-x-0 -top-10 grid grid-cols-3 gap-4 px-4 opacity-60 sm:grid-cols-5 lg:gap-6 lg:px-10">
+        {BOARD.map(([name, colour, jobs], i) => (
+          <div key={name} className={i > 2 ? "hidden sm:block" : undefined}>
+            <div className="drift" style={{ animationDelay: `${-i * 9}s` }}>
+              {[0, 1].map((copy) => (
+                <div key={copy} className="pb-4">
+                  <p className="mb-3 flex items-center gap-2 pt-12 text-xs font-bold uppercase tracking-[0.14em]" style={{ color: colour }}>
+                    <span className="h-2 w-2 rounded-full" style={{ background: colour }} />
+                    {name}
+                  </p>
+                  {[...jobs, ...jobs].map(([company, line], k) => (
+                    <div key={k} className="mb-3 rounded-xl border border-white/10 bg-white/[0.04] p-3 text-xs">
+                      <span className="mb-2 block h-1 w-8 rounded-full" style={{ background: colour }} />
+                      <p className="font-semibold text-rail-ink">{company}</p>
+                      <p className="text-rail-soft">{line}</p>
+                    </div>
+                  ))}
                 </div>
               ))}
             </div>
-          ))}
-        </div>
+          </div>
+        ))}
       </div>
-
-      {/* A reminder */}
-      <div className={`${card} hidden w-full max-w-[250px] rotate-[2.5deg] self-start justify-self-start xl:block`}>
-        <p className="flex items-center gap-1.5 text-sm font-bold">
-          <Icon name="bell" className="h-4 w-4 text-[#a8401c]" />
-          Today
-        </p>
-        <p className="mt-2 rounded-lg bg-[#fbe6dc] p-2 text-xs">
-          <span className="block font-bold">Follow up with Fynbos Digital</span>
-          <span className="text-[#6b3018]">Applied 7 days ago, no reply yet</span>
-        </p>
-        <p className="mt-2 flex items-center justify-center gap-1.5 rounded-lg bg-[#1b6b4f] py-1.5 text-xs font-bold text-white">
-          <Icon name="mail" className="h-3.5 w-3.5" />
-          Email them
-        </p>
-      </div>
-
-      {/* Stats */}
-      <div className={`${card} w-full max-w-[230px] rotate-[-1.5deg] justify-self-center xl:mt-4 xl:justify-self-end`}>
-        <p className="flex items-center gap-1.5 text-sm font-bold">
-          <Icon name="chart" className="h-4 w-4 text-[#2a59b0]" />
-          How it&apos;s going
-        </p>
-        <div className="mt-2 grid grid-cols-2 gap-2 text-center">
-          <p className="rounded-lg bg-[#f6f4ef] py-1.5">
-            <span className="block text-xl font-extrabold">42%</span>
-            <span className="text-[10px] text-[#545968]">heard back</span>
-          </p>
-          <p className="rounded-lg bg-[#f6f4ef] py-1.5">
-            <span className="block text-xl font-extrabold">3</span>
-            <span className="text-[10px] text-[#545968]">interviews</span>
-          </p>
-        </div>
-        <p className="mt-2 text-center text-[11px] font-semibold text-[#1b6b4f]">4 of 5 applications this week</p>
-      </div>
+      {/* Fades the board towards the middle, where the card is */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_70%_at_50%_45%,var(--color-rail)_45%,transparent_100%)]" />
+      <div className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-rail to-transparent" />
+      <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-rail to-transparent" />
     </div>
   );
 }

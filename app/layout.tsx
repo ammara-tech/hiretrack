@@ -1,10 +1,11 @@
 import type { Metadata, Viewport } from "next";
-import { Plus_Jakarta_Sans } from "next/font/google";
+import { Sora } from "next/font/google";
 import AppShell from "@/components/AppShell";
 import RegisterServiceWorker from "@/components/RegisterServiceWorker";
 import "./globals.css";
 
-const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"], variable: "--font-jakarta", display: "swap" });
+// Sora: a geometric typeface, for the career-studio look
+const sora = Sora({ subsets: ["latin"], variable: "--font-sora", display: "swap" });
 
 export const metadata: Metadata = {
   title: "HireTrack — your job hunt on one board",
@@ -15,8 +16,8 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f6f4ef" },
-    { media: "(prefers-color-scheme: dark)", color: "#12141a" },
+    { media: "(prefers-color-scheme: light)", color: "#f2f1f6" },
+    { media: "(prefers-color-scheme: dark)", color: "#121117" },
   ],
 };
 
@@ -25,7 +26,7 @@ const themeScript = `try{var t=localStorage.getItem("hiretrack:theme");if(t!=="l
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en-ZA" className={jakarta.variable} suppressHydrationWarning>
+    <html lang="en-ZA" className={sora.variable} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>

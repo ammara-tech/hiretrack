@@ -129,7 +129,7 @@ export default function SettingsPage() {
               Delete {jobs.length} job{jobs.length === 1 ? "" : "s"} and {docs.length} document{docs.length === 1 ? "" : "s"} for good?
             </p>
             <div className="mt-2 flex flex-wrap gap-2">
-              <button type="button" onClick={deleteAll} disabled={deleting} className="btn !bg-alert !text-white dark:!text-[#12141a]">
+              <button type="button" onClick={deleteAll} disabled={deleting} className="btn !bg-alert !text-white dark:!text-[#121117]">
                 {deleting ? "Deleting…" : "Yes, delete everything"}
               </button>
               <button type="button" onClick={() => setConfirming(false)} className="btn-quiet">
